@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>숫자 링크 이동기</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 40px 16px;
+      color: #222;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 520px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 28px;
+      border-radius: 14px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+    }
+
+    h2 {
+      margin: 0 0 20px;
+      text-align: center;
+      font-size: 24px;
+    }
+
+    .input-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    input {
+      flex: 1;
+      font-size: 18px;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      min-width: 0;
+    }
+
+    button {
+      font-size: 17px;
+      padding: 12px 18px;
+      border: 0;
+      border-radius: 8px;
+      background-color: #222;
+      color: #fff;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    button:hover {
+      background-color: #444;
+    }
+
+    .memo-box {
+      border-top: 1px solid #ddd;
+      padding-top: 22px;
+    }
+
+    .memo-box h3 {
+      margin: 0 0 10px;
+      font-size: 18px;
+    }
+
+    .memo-help {
+      margin: 0 0 10px;
+      font-size: 13px;
+      color: #666;
+      line-height: 1.5;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 160px;
+      resize: vertical;
+      font-size: 16px;
+      line-height: 1.5;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-family: Arial, sans-serif;
+    }
+
+    .memo-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .memo-actions button {
+      flex: 1;
+      font-size: 15px;
+      padding: 10px;
+    }
+
+    .sub-button {
+      background-color: #666;
+    }
+
+    .sub-button:hover {
+      background-color: #777;
+    }
+
+    .status {
+      min-height: 20px;
+      margin-top: 8px;
+      font-size: 13px;
+      color: #555;
+    }
+
+    footer {
+      margin-top: 24px;
+      padding-top: 16px;
+      border-top: 1px solid #ddd;
+      font-size: 12px;
+      color: #666;
+      line-height: 1.6;
+      text-align: center;
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 20px 12px;
+      }
+
+      .container {
+        padding: 22px 16px;
+      }
+
+      h2 {
+        font-size: 21px;
+      }
+
+      .input-row {
+        flex-direction: column;
+      }
+
+      input,
+      button,
+      textarea {
+        width: 100%;
+      }
+
+      .memo-actions {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <h2>숫자 입력 후 이동</h2>
+
+    <div class="input-row">
+      <input type="text" id="inputNum" placeholder="숫자 6~7자리" inputmode="numeric" autocomplete="off">
+      <button type="button" onclick="goPage()">GO</button>
+    </div>
+
+    <section class="memo-box">
+      <h3>메모</h3>
+      <p class="memo-help">메모 내용은 현재 사용하는 브라우저에만 저장됩니다. 다른 PC나 휴대폰과 자동 공유되지는 않습니다.</p>
+      <textarea id="memoText" placeholder="내용을 입력하세요."></textarea>
+
+      <div class="memo-actions">
+        <button type="button" onclick="saveMemo()">메모 저장</button>
+        <button type="button" class="sub-button" onclick="clearMemo()">메모 삭제</button>
+      </div>
+
+      <div id="memoStatus" class="status"></div>
+    </section>
+
+    <footer>
+      Copyright © 2026. All rights reserved.<br>
+      무단 복제, 수정, 배포, 재사용을 금지합니다.
+    </footer>
+  </main>
+
+  <script>
+    const input = document.getElementById('inputNum');
+    const memoText = document.getElementById('memoText');
+    const memoStatus = document.getElementById('memoStatus');
+    const memoKey = 'simpleMemoText';
+
+    input.addEventListener('keydown', function(event) {
+      if (event.key === 'Enter') {
+        goPage();
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+      memoText.value = localStorage.getItem(memoKey) || '';
+    });
+
+    function goPage() {
+      const value = input.value.trim();
+
+      if (!/^\d{6,7}$/.test(value)) {
+        alert('6~7자리 숫자를 입력하세요.');
+        return;
+      }
+
+      const url = `https://acrm.amano.co.kr:8443/acrm/trouble/view/${value}/returl/trouble_list`;
+      window.open(url, '_blank');
+    }
+
+    function saveMemo() {
+      localStorage.setItem(memoKey, memoText.value);
+      showStatus('메모가 저장되었습니다.');
+    }
+
+    function clearMemo() {
+      if (!confirm('저장된 메모를 삭제하시겠습니까?')) {
+        return;
+      }
+
+      memoText.value = '';
+      localStorage.removeItem(memoKey);
+      showStatus('메모가 삭제되었습니다.');
+    }
+
+    function showStatus(message) {
+      memoStatus.textContent = message;
+
+      setTimeout(function() {
+        memoStatus.textContent = '';
+      }, 2000);
+    }
+  </script>
+</body>
+</html>
