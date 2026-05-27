@@ -176,20 +176,21 @@
       <p class="desc">숫자가 들어갈 위치에 반드시 <strong>{num}</strong>을 넣으세요.</p>
       <div class="button-group">
         <button type="button" onclick="saveUrlTemplate()">주소 저장</button>
-        <button type="button" class="btn-sub" onclick="resetUrlTemplate()">기본값 복원</button>
+        <button type="button" class="btn-sub" onclick="clearUrlTemplate()">주소 지우기</button>
       </div>
       <div id="urlStatus" class="status"></div>
     </div>
 
     <div class="license">
-      Copyright © 2026 Kim duckBae. All rights reserved.<br>
+      Copyright © 2026 rokicname. All rights reserved.<br>
       무단 복제, 수정, 배포, 재사용을 금지합니다.
     </div>
   </div>
 
   <script>
-    const DEFAULT_URL_TEMPLATE = 'https://acrm.amano.co.kr:8443/acrm/trouble/view/{num}/returl/trouble_list';
-    const URL_TEMPLATE_KEY = 'savedUrlTemplate';
+    const URL_TEMPLATE_KEY = 'savedUrlTemplateV2';
+    const OLD_URL_TEMPLATE_KEY = 'savedUrlTemplate';
+    const OLD_DEFAULT_URL_TEMPLATE = 'https://acrm.amano.co.kr:8443/acrm/trouble/view/{num}/returl/trouble_list';
     const MEMO_KEY = 'savedMemoText';
 
     const inputNum = document.getElementById('inputNum');
@@ -199,7 +200,12 @@
     const memoStatus = document.getElementById('memoStatus');
 
     window.addEventListener('DOMContentLoaded', function() {
-      urlTemplate.value = localStorage.getItem(URL_TEMPLATE_KEY) || DEFAULT_URL_TEMPLATE;
+      // 기존 버전에서 자동 저장된 기본 주소는 더 이상 불러오지 않습니다.
+      if (localStorage.getItem(OLD_URL_TEMPLATE_KEY) === OLD_DEFAULT_URL_TEMPLATE) {
+        localStorage.removeItem(OLD_URL_TEMPLATE_KEY);
+      }
+
+      urlTemplate.value = localStorage.getItem(URL_TEMPLATE_KEY) || '';
       memoBox.value = localStorage.getItem(MEMO_KEY) || '';
     });
 
@@ -211,11 +217,17 @@
 
     function goPage() {
       const value = inputNum.value.trim();
-      const template = (localStorage.getItem(URL_TEMPLATE_KEY) || urlTemplate.value || DEFAULT_URL_TEMPLATE).trim();
+      const template = (urlTemplate.value || localStorage.getItem(URL_TEMPLATE_KEY) || '').trim();
 
-      if (!/^\d{6,7}$/.test(value)) {
+      if (!/^[0-9]{6,7}$/.test(value)) {
         alert('6~7자리 숫자를 입력하세요.');
         inputNum.focus();
+        return;
+      }
+
+      if (!template) {
+        alert('이동 주소를 먼저 입력하고 저장하세요.');
+        urlTemplate.focus();
         return;
       }
 
@@ -249,10 +261,11 @@
       setTimeout(function() { urlStatus.textContent = ''; }, 2000);
     }
 
-    function resetUrlTemplate() {
-      urlTemplate.value = DEFAULT_URL_TEMPLATE;
-      localStorage.setItem(URL_TEMPLATE_KEY, DEFAULT_URL_TEMPLATE);
-      urlStatus.textContent = '기본 주소로 복원되었습니다.';
+    function clearUrlTemplate() {
+      urlTemplate.value = '';
+      localStorage.removeItem(URL_TEMPLATE_KEY);
+      localStorage.removeItem(OLD_URL_TEMPLATE_KEY);
+      urlStatus.textContent = '주소가 삭제되었습니다.';
       setTimeout(function() { urlStatus.textContent = ''; }, 2000);
     }
 
