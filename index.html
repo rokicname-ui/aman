@@ -10,231 +10,263 @@
     }
 
     body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
       margin: 0;
-      padding: 40px 16px;
+      font-family: Arial, 'Noto Sans KR', sans-serif;
+      background-color: #f4f4f4;
       color: #222;
+      padding: 24px;
     }
 
-    .container {
+    .wrap {
       width: 100%;
-      max-width: 520px;
+      max-width: 720px;
       margin: 0 auto;
+    }
+
+    .card {
       background: #fff;
-      padding: 28px;
+      border: 1px solid #ddd;
       border-radius: 14px;
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+      padding: 24px;
+      margin-bottom: 18px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
     }
 
-    h2 {
-      margin: 0 0 20px;
-      text-align: center;
-      font-size: 24px;
+    h2, h3 {
+      margin: 0 0 16px;
     }
 
-    .input-row {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 24px;
+    label {
+      display: block;
+      font-weight: 700;
+      margin-bottom: 8px;
+      text-align: left;
     }
 
-    input {
-      flex: 1;
-      font-size: 18px;
-      padding: 12px;
+    input, textarea {
+      width: 100%;
+      font-size: 16px;
+      padding: 11px 12px;
       border: 1px solid #ccc;
       border-radius: 8px;
-      min-width: 0;
+      outline: none;
+    }
+
+    input:focus, textarea:focus {
+      border-color: #333;
+    }
+
+    textarea {
+      min-height: 140px;
+      resize: vertical;
+      line-height: 1.5;
+    }
+
+    .row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .row input {
+      flex: 1;
     }
 
     button {
-      font-size: 17px;
-      padding: 12px 18px;
+      font-size: 16px;
+      padding: 11px 18px;
       border: 0;
       border-radius: 8px;
-      background-color: #222;
+      background: #222;
       color: #fff;
       cursor: pointer;
       white-space: nowrap;
     }
 
     button:hover {
-      background-color: #444;
+      background: #444;
     }
 
-    .memo-box {
-      border-top: 1px solid #ddd;
-      padding-top: 22px;
+    .btn-sub {
+      background: #666;
     }
 
-    .memo-box h3 {
-      margin: 0 0 10px;
-      font-size: 18px;
+    .btn-sub:hover {
+      background: #777;
     }
 
-    .memo-help {
-      margin: 0 0 10px;
-      font-size: 13px;
-      color: #666;
-      line-height: 1.5;
-    }
-
-    textarea {
-      width: 100%;
-      min-height: 160px;
-      resize: vertical;
-      font-size: 16px;
-      line-height: 1.5;
-      padding: 12px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-family: Arial, sans-serif;
-    }
-
-    .memo-actions {
+    .button-group {
       display: flex;
       gap: 10px;
       margin-top: 10px;
+      flex-wrap: wrap;
     }
 
-    .memo-actions button {
-      flex: 1;
-      font-size: 15px;
-      padding: 10px;
-    }
-
-    .sub-button {
-      background-color: #666;
-    }
-
-    .sub-button:hover {
-      background-color: #777;
+    .desc {
+      margin: 8px 0 0;
+      color: #666;
+      font-size: 14px;
+      line-height: 1.5;
+      text-align: left;
     }
 
     .status {
-      min-height: 20px;
       margin-top: 8px;
-      font-size: 13px;
-      color: #555;
+      color: #245a24;
+      font-size: 14px;
+      min-height: 20px;
+      text-align: left;
     }
 
-    footer {
-      margin-top: 24px;
-      padding-top: 16px;
-      border-top: 1px solid #ddd;
+    .license {
       font-size: 12px;
       color: #666;
-      line-height: 1.6;
+      line-height: 1.5;
       text-align: center;
+      margin-top: 24px;
     }
 
-    @media (max-width: 480px) {
+    @media (max-width: 520px) {
       body {
-        padding: 20px 12px;
+        padding: 14px;
       }
 
-      .container {
-        padding: 22px 16px;
+      .card {
+        padding: 18px;
+        border-radius: 12px;
       }
 
-      h2 {
-        font-size: 21px;
-      }
-
-      .input-row {
+      .row {
         flex-direction: column;
       }
 
-      input,
-      button,
-      textarea {
+      button {
         width: 100%;
-      }
-
-      .memo-actions {
-        flex-direction: column;
       }
     }
   </style>
 </head>
 <body>
-  <main class="container">
-    <h2>숫자 입력 후 이동</h2>
-
-    <div class="input-row">
-      <input type="text" id="inputNum" placeholder="숫자 6~7자리" inputmode="numeric" autocomplete="off">
-      <button type="button" onclick="goPage()">GO</button>
+  <div class="wrap">
+    <div class="card">
+      <h2>숫자 입력 후 이동</h2>
+      <div class="row">
+        <input type="text" id="inputNum" placeholder="숫자 6~7자리" inputmode="numeric" autocomplete="off">
+        <button type="button" onclick="goPage()">GO</button>
+      </div>
+      <p class="desc">저장된 이동 주소의 <strong>{num}</strong> 위치에 입력한 숫자가 들어갑니다.</p>
     </div>
 
-    <section class="memo-box">
+    <div class="card">
       <h3>메모</h3>
-      <p class="memo-help">메모 내용은 현재 사용하는 브라우저에만 저장됩니다. 다른 PC나 휴대폰과 자동 공유되지는 않습니다.</p>
-      <textarea id="memoText" placeholder="내용을 입력하세요."></textarea>
-
-      <div class="memo-actions">
+      <label for="memoBox">저장할 내용</label>
+      <textarea id="memoBox" placeholder="내용을 입력하세요."></textarea>
+      <p class="desc">같은 기기와 같은 브라우저에서 다시 접속하면 저장된 내용이 유지됩니다.</p>
+      <div class="button-group">
         <button type="button" onclick="saveMemo()">메모 저장</button>
-        <button type="button" class="sub-button" onclick="clearMemo()">메모 삭제</button>
+        <button type="button" class="btn-sub" onclick="clearMemo()">메모 지우기</button>
       </div>
-
       <div id="memoStatus" class="status"></div>
-    </section>
+    </div>
 
-    <footer>
-      Copyright © 2026. All rights reserved.<br>
+    <div class="card">
+      <h3>이동 주소 설정</h3>
+      <label for="urlTemplate">이동 주소</label>
+      <input type="text" id="urlTemplate" placeholder="https://example.com/view/{num}">
+      <p class="desc">숫자가 들어갈 위치에 반드시 <strong>{num}</strong>을 넣으세요.</p>
+      <div class="button-group">
+        <button type="button" onclick="saveUrlTemplate()">주소 저장</button>
+        <button type="button" class="btn-sub" onclick="resetUrlTemplate()">기본값 복원</button>
+      </div>
+      <div id="urlStatus" class="status"></div>
+    </div>
+
+    <div class="license">
+      Copyright © 2026 Kim duckBae. All rights reserved.<br>
       무단 복제, 수정, 배포, 재사용을 금지합니다.
-    </footer>
-  </main>
+    </div>
+  </div>
 
   <script>
-    const input = document.getElementById('inputNum');
-    const memoText = document.getElementById('memoText');
-    const memoStatus = document.getElementById('memoStatus');
-    const memoKey = 'simpleMemoText';
+    const DEFAULT_URL_TEMPLATE = 'https://acrm.amano.co.kr:8443/acrm/trouble/view/{num}/returl/trouble_list';
+    const URL_TEMPLATE_KEY = 'savedUrlTemplate';
+    const MEMO_KEY = 'savedMemoText';
 
-    input.addEventListener('keydown', function(event) {
+    const inputNum = document.getElementById('inputNum');
+    const urlTemplate = document.getElementById('urlTemplate');
+    const memoBox = document.getElementById('memoBox');
+    const urlStatus = document.getElementById('urlStatus');
+    const memoStatus = document.getElementById('memoStatus');
+
+    window.addEventListener('DOMContentLoaded', function() {
+      urlTemplate.value = localStorage.getItem(URL_TEMPLATE_KEY) || DEFAULT_URL_TEMPLATE;
+      memoBox.value = localStorage.getItem(MEMO_KEY) || '';
+    });
+
+    inputNum.addEventListener('keydown', function(event) {
       if (event.key === 'Enter') {
         goPage();
       }
     });
 
-    document.addEventListener('DOMContentLoaded', function() {
-      memoText.value = localStorage.getItem(memoKey) || '';
-    });
-
     function goPage() {
-      const value = input.value.trim();
+      const value = inputNum.value.trim();
+      const template = (localStorage.getItem(URL_TEMPLATE_KEY) || urlTemplate.value || DEFAULT_URL_TEMPLATE).trim();
 
       if (!/^\d{6,7}$/.test(value)) {
         alert('6~7자리 숫자를 입력하세요.');
+        inputNum.focus();
         return;
       }
 
-      const url = `https://acrm.amano.co.kr:8443/acrm/trouble/view/${value}/returl/trouble_list`;
-      window.open(url, '_blank');
+      if (!template.includes('{num}')) {
+        alert('이동 주소에 {num}을 넣어야 합니다.');
+        urlTemplate.focus();
+        return;
+      }
+
+      const targetUrl = template.replaceAll('{num}', encodeURIComponent(value));
+      window.open(targetUrl, '_blank');
+    }
+
+    function saveUrlTemplate() {
+      const template = urlTemplate.value.trim();
+
+      if (!template) {
+        alert('이동 주소를 입력하세요.');
+        urlTemplate.focus();
+        return;
+      }
+
+      if (!template.includes('{num}')) {
+        alert('숫자가 들어갈 위치에 {num}을 넣으세요.');
+        urlTemplate.focus();
+        return;
+      }
+
+      localStorage.setItem(URL_TEMPLATE_KEY, template);
+      urlStatus.textContent = '주소가 저장되었습니다.';
+      setTimeout(function() { urlStatus.textContent = ''; }, 2000);
+    }
+
+    function resetUrlTemplate() {
+      urlTemplate.value = DEFAULT_URL_TEMPLATE;
+      localStorage.setItem(URL_TEMPLATE_KEY, DEFAULT_URL_TEMPLATE);
+      urlStatus.textContent = '기본 주소로 복원되었습니다.';
+      setTimeout(function() { urlStatus.textContent = ''; }, 2000);
     }
 
     function saveMemo() {
-      localStorage.setItem(memoKey, memoText.value);
-      showStatus('메모가 저장되었습니다.');
+      localStorage.setItem(MEMO_KEY, memoBox.value);
+      memoStatus.textContent = '메모가 저장되었습니다.';
+      setTimeout(function() { memoStatus.textContent = ''; }, 2000);
     }
 
     function clearMemo() {
-      if (!confirm('저장된 메모를 삭제하시겠습니까?')) {
-        return;
-      }
-
-      memoText.value = '';
-      localStorage.removeItem(memoKey);
-      showStatus('메모가 삭제되었습니다.');
-    }
-
-    function showStatus(message) {
-      memoStatus.textContent = message;
-
-      setTimeout(function() {
-        memoStatus.textContent = '';
-      }, 2000);
+      memoBox.value = '';
+      localStorage.removeItem(MEMO_KEY);
+      memoStatus.textContent = '메모가 삭제되었습니다.';
+      setTimeout(function() { memoStatus.textContent = ''; }, 2000);
     }
   </script>
 </body>
